@@ -22,6 +22,9 @@ public class Settings {
     public static final ConfigSetting STOP_DISPENSER_IN_WORLD = new ConfigSetting(config, "Main.Block Dispenser In Blocked Spawning Worlds", false,
             "Should dispensers still spawn caught mobs even though it's in a blocked spawning world?");
 
+    public static final ConfigSetting DISABLE_DISPENSE = new ConfigSetting(config, "Main.Disable Dispense", false,
+            "Completely disable the dispensers to dispense eggs in any world?");
+
     public static final ConfigSetting BLOCKED_CATCHING_WORLDS = new ConfigSetting(config, "Main.Blocked Catching Worlds", Arrays.asList("world_nether"),
             "Which worlds should players not be allowed to catch mobs?");
 

@@ -25,31 +25,39 @@ public class DispenserListeners implements Listener {
 
     @EventHandler
     public void onDispense(BlockDispenseEvent event) {
-        ItemStack item = event.getItem();
+        if(Settings.DISABLE_DISPENSE.getBoolean()) {
+            return;
+        }
 
-        if (event.getBlock().getType() != Material.DISPENSER) return;
+        ItemStack item = event.getItem();
+        if (event.getBlock().getType() != Material.DISPENSER) {
+            return;
+        }
 
         NBTItem nbtItem = NmsManager.getNbt().of(item);
         if (nbtItem.has("UCI")) {
             event.setCancelled(true);
             return;
         }
+
         if (nbtItem.has("UC")) {
             if (!Settings.STOP_DISPENSER_IN_WORLD.getBoolean()) {
                 MaterialData materialData = event.getBlock().getState().getData();
                 Dispenser dispenser = (Dispenser) materialData;
                 BlockFace face = dispenser.getFacing();
                 Location location = event.getBlock().getRelative(face).getLocation().add(.5, 0, .5);
-                if (nbtItem.has("serialized_entity"))
+                if (nbtItem.has("serialized_entity")) {
                     EntityUtils.spawnEntity(location, item);
-                else
+                } else {
                     OldEntityUtils.spawnEntity(location, item);
+                }
 
                 Bukkit.getScheduler().runTaskLater(UltimateCatcher.getInstance(), () -> {
                     Entity entity = location.getWorld().getNearbyEntities(location, 1, 1, 1).stream()
                             .filter(e -> e.getCustomName() != null).findFirst().orElse(null);
-                    if (entity != null)
+                    if (entity != null) {
                         entity.remove();
+                    }
                 }, 0L);
 
             }
