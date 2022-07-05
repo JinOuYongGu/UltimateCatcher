@@ -2,7 +2,7 @@
     <groupId>com.songoda</groupId>
     <artifactId>UltimateCatcher</artifactId>
     <modelVersion>4.0.0</modelVersion>
-    <version>1.6.0</version>
+    <version>1.6.1</version>
 
     <build>
         <defaultGoal>clean install</defaultGoal>
@@ -11,16 +11,19 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
+                <version>3.10.1</version>
+
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>com.google.code.maven-replacer-plugin</groupId>
                 <artifactId>replacer</artifactId>
                 <version>1.5.3</version>
+
                 <executions>
                     <execution>
                         <phase>prepare-package</phase>
@@ -29,8 +32,10 @@
                         </goals>
                     </execution>
                 </executions>
+
                 <configuration>
                     <file>${project.build.directory}/classes/plugin.yml</file>
+
                     <replacements>
                         <replacement>
                             <token>maven-version-number</token>
@@ -39,6 +44,7 @@
                     </replacements>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -51,14 +57,18 @@
                         <goals>
                             <goal>shade</goal>
                         </goals>
+
                         <configuration>
                             <shadedArtifactAttached>false</shadedArtifactAttached>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
+
                             <artifactSet>
                                 <includes>
                                     <include>com.songoda:SongodaCore</include>
+                                    <include>com.googlecode.json-simple:json-simple</include>
                                 </includes>
                             </artifactSet>
+
                             <filters>
                                 <filter>
                                     <artifact>*:*</artifact>
@@ -69,10 +79,16 @@
                                     </excludes>
                                 </filter>
                             </filters>
+
                             <relocations>
                                 <relocation>
                                     <pattern>com.songoda.core</pattern>
                                     <shadedPattern>${project.groupId}.ultimatecatcher.core</shadedPattern>
+                                </relocation>
+
+                                <relocation>
+                                    <pattern>org.json</pattern>
+                                    <shadedPattern>${project.groupId}.ultimatecatcher.third_party.org.json</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
@@ -105,6 +121,7 @@
             <url>https://repo.citizensnpcs.co/</url>
         </repository>
     </repositories>
+
     <dependencies>
         <dependency>
             <groupId>org.spigotmc</groupId>
@@ -112,12 +129,22 @@
             <version>1.18-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>com.songoda</groupId>
             <artifactId>SongodaCore</artifactId>
-            <version>2.6.6</version>
+            <version>2.6.12</version>
             <scope>compile</scope>
         </dependency>
+
+        <!-- TODO: Don't rely on json-simple -->
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1.1</version>
+            <scope>compile</scope>
+        </dependency>
+
         <dependency>
             <groupId>net.citizensnpcs</groupId>
             <artifactId>citizens</artifactId>
